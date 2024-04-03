@@ -41,13 +41,13 @@ const Root = ({ navigation }) => {
           headerShown: true,
         }}
       />
-      <Stack.Screen
+      {/* <Stack.Screen
         name="Load"
         component={LoadScreen}
         options={{
           headerShown: false,
         }}
-      />
+      /> */}
     </Stack.Navigator>
   );
 };

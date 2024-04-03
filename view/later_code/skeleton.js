@@ -12,9 +12,6 @@ import Router from "../page/root";
 
 const Skeleton = () => {
   const navigation = useNavigation();
-  const pressHandler = () => {
-    navigation.navigate("Load");
-  };
 
   return (
     <View style={[s.f100]}>

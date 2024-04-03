@@ -1,93 +1,100 @@
 import React from "react";
-import { View, Text, Button, Image } from "react-native";
+import { View, Text, Button, Image, TouchableOpacity } from "react-native";
 import { useState } from "react";
 import s from "../public/styles";
 import { Entypo } from "@expo/vector-icons";
 import { Ionicons } from "@expo/vector-icons";
 import { FontAwesome5 } from "@expo/vector-icons";
-import { TouchableWithoutFeedback } from "react-native-web";
+import { MaterialIcons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 
-const NavBar = () => {
-  const navigation = useNavigation();
-  const [page, setPage] = useState("Home");
-
-  const pressHandler = (p_page) => {
-    console.log(p_page);
-    setPage(p_page);
-    navigation.navigate("Root", { screen: p_page });
-  };
-
+const NavBar = ({ state, descriptors, navigation }) => {
+  const iconListFocus = [
+    <MaterialIcons name="home" size={24} color="black" />,
+    <MaterialIcons name="settings" size={24} color="black" />,
+    <MaterialIcons name="notifications" size={24} color="black" />,
+  ];
+  const iconListNotFocus = [
+    <MaterialIcons name="home" size={24} color="white" />,
+    <MaterialIcons name="settings" size={24} color="white" />,
+    <MaterialIcons name="notifications" size={24} color="white" />,
+  ];
   return (
-    <View style={[s.bg_darkBlue, s.f10]}>
-      <View
-        style={[
-          s.fRow,
-          s.f100,
-          s.alCenter,
-          s.juCenter,
-          s.hFull,
-          {
-            shadowColor: "#000",
-            shadowOffset: { width: 0, height: 0 },
-            shadowRadius: 4,
-            shadowOpacity: 0.3,
-          },
-        ]}>
-        <View
-          style={
-            page == "Home"
-              ? [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter, s.bg_white]
-              : [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter]
-          }>
-          <TouchableWithoutFeedback onPress={() => pressHandler("Home")}>
-            <View style={[s.alCenter]}>
-              <Entypo name="home" size={24} color="black" />
-              <Text style={[s.textCenter]}>Trang chủ</Text>
+    <View
+      style={{
+        flexDirection: "row",
+        backgroundColor: "white",
+      }}>
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: "tabPress",
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name, route.params);
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: "tabLongPress",
+            target: route.key,
+          });
+        };
+
+        return (
+          <TouchableOpacity
+            key={index}
+            accessibilityRole="button"
+            accessibilityState={isFocused ? { selected: true } : {}}
+            accessibilityLabel={options.tabBarAccessibilityLabel}
+            testID={options.tabBarTestID}
+            onPress={onPress}
+            onLongPress={onLongPress}
+            style={{ flex: 1 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: isFocused ? "#FFF" : "#000",
+                paddingTop: 10,
+                paddingBottom: 10,
+              }}>
+              {options.tabBarIcon !== undefined ? (
+                options.tabBarIcon({
+                  focused: isFocused,
+                })
+              ) : (
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}>
+                  {isFocused ? iconListFocus[index] : iconListNotFocus[index]}
+                  <Text style={{ color: isFocused ? "#000" : "#FFF" }}>
+                    {label}
+                  </Text>
+                </View>
+              )}
             </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View
-          style={
-            page == "Statistic"
-              ? [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter, s.bg_white]
-              : [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter]
-          }>
-          <TouchableWithoutFeedback onPress={() => pressHandler("Statistic")}>
-            <View style={[s.alCenter]}>
-              <Ionicons name="stats-chart-sharp" size={24} color="black" />
-              <Text style={[s.textCenter]}>Hiệu suất</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View
-          style={
-            page == "Notification"
-              ? [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter, s.bg_white]
-              : [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter]
-          }>
-          <TouchableWithoutFeedback
-            onPress={() => pressHandler("Notification")}>
-            <View style={[s.alCenter]}>
-              <Ionicons name="notifications" size={24} color="black" />
-              <Text style={[s.textCenter]}>Thông báo</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-        <View
-          style={
-            page == "Setting"
-              ? [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter, s.bg_white]
-              : [s.f100, s.fCol, s.hFull, s.alCenter, s.juCenter]
-          }>
-          <TouchableWithoutFeedback onPress={() => pressHandler("Setting")}>
-            <View style={[s.alCenter]}>
-              <FontAwesome5 name="sliders-h" size={24} color="black" />
-              <Text style={[s.textCenter]}>Thiết lập</Text>
-            </View>
-          </TouchableWithoutFeedback>
-        </View>
-      </View>
+          </TouchableOpacity>
+        );
+      })}
     </View>
   );
 };
