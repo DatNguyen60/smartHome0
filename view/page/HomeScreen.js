@@ -1,9 +1,26 @@
-import React from "react";
-import { View, Text, Button, TouchableOpacity } from "react-native";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { View, Text, TouchableOpacity } from "react-native";
+import io from "socket.io-client";
 
-const HomeScreen = ({ changeScreen }) => {
+const SERVER_URL = "http://localhost:3000";
+
+const HomeScreen = () => {
   const [lightSwitch, setLightSwitch] = useState({ power: 0 });
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const socket = io(SERVER_URL);
+
+    socket.on("data", (newData) => {
+      console.log("new data", newData);
+      setData(newData);
+    });
+
+    return () => {
+      socket.disconnect(); // Ngắt kết nối khi component unmount
+    };
+  }, []);
+
   const pressHandler = () => {
     setLightSwitch((prevState) => ({
       ...prevState,
@@ -11,6 +28,7 @@ const HomeScreen = ({ changeScreen }) => {
     }));
     console.log(lightSwitch);
   };
+
   return (
     <View
       style={{
@@ -31,6 +49,20 @@ const HomeScreen = ({ changeScreen }) => {
           {lightSwitch.power === 0 ? "Bật" : "Tắt"}
         </Text>
       </TouchableOpacity>
+      <View
+        style={{
+          border: 1,
+          margin: 10,
+          padding: 10,
+          shadowColor: "#fff",
+          shadowRadius: 10,
+          shadowOffset: { width: 0, height: 0 },
+          backgroundColor: "white",
+          flexDirection: "row",
+        }}>
+        <Text style={{ color: "black" }}>Value form server with socket : </Text>
+        <Text style={{ fontWeight: "bold", color: "black" }}>{data}</Text>
+      </View>
     </View>
   );
 };

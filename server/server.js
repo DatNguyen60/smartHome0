@@ -1,28 +1,34 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri =
-  "mongodb+srv://datnguyen666:Aljksfh14.@smarthome0.mrc1mhu.mongodb.net/?retryWrites=true&w=majority&appName=SmartHome0";
-// mongodb+srv://datnguyen666:<password>@smarthome0.mrc1mhu.mongodb.net/
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
+const express = require("express");
+const http = require("http");
+const socketIo = require("socket.io");
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server, {
+  cors: {
+    origin: "http://localhost:8081",
+    methods: ["GET", "POST"],
   },
 });
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
+let sendDataInterval = null;
+
+function sendSimulatedData() {
+  io.emit("data", Math.floor(Math.random() * 100));
 }
-run().catch(console.dir);
+
+io.on("connection", (socket) => {
+  console.log("A client connected");
+
+  sendDataInterval = setInterval(sendSimulatedData, 1000);
+
+  socket.on("disconnect", () => {
+    console.log("A client disconnected");
+    clearInterval(sendDataInterval);
+  });
+});
+
+const PORT = process.env.PORT || 3000;
+server.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
