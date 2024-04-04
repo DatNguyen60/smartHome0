@@ -7,17 +7,19 @@ const SERVER_URL = "http://localhost:3000";
 const HomeScreen = () => {
   const [lightSwitch, setLightSwitch] = useState({ power: 0 });
   const [data, setData] = useState(null);
+  const [socket, setSocket] = useState(null);
 
   useEffect(() => {
     const socket = io(SERVER_URL);
+    setSocket(socket);
 
-    socket.on("data", (newData) => {
-      console.log("new data", newData);
-      setData(newData);
+    socket.on("data", (receiveData) => {
+      console.log("new data", receiveData);
+      setData(receiveData);
     });
 
     return () => {
-      socket.disconnect(); // Ngắt kết nối khi component unmount
+      socket.disconnect();
     };
   }, []);
 
@@ -27,6 +29,9 @@ const HomeScreen = () => {
       power: prevState.power === 0 ? 100 : 0,
     }));
     console.log(lightSwitch);
+    if (socket) {
+      socket.emit("clientData", { data: lightSwitch.power });
+    }
   };
 
   return (

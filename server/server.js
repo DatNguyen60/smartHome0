@@ -22,6 +22,15 @@ io.on("connection", (socket) => {
 
   sendDataInterval = setInterval(sendSimulatedData, 1000);
 
+  socket.on("clientData", (receiveData) => {
+    console.log(
+      receiveData,
+      receiveData.data === 0
+        ? "Người dùng muốn bật đèn"
+        : "Người dùng muốn tắt đèn"
+    );
+  });
+
   socket.on("disconnect", () => {
     console.log("A client disconnected");
     clearInterval(sendDataInterval);
