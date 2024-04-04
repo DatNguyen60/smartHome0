@@ -1,9 +1,13 @@
 # smartHome0
-# run:
+## run:
 - Chạy client:
+```bash
 npm start
+```
 - Chạy server:
+```bash
 cd server
 node server.js
-# status: 
+```
+## status: 
 Ready for demo
