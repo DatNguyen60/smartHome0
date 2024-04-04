@@ -11,11 +11,15 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const socket = io(SERVER_URL);
-    setSocket(socket);
 
     socket.on("data", (receiveData) => {
       console.log("new data", receiveData);
       setData(receiveData);
+    });
+
+    socket.on("connect", () => {
+      console.log("connected to server");
+      setSocket(socket);
     });
 
     return () => {
@@ -24,12 +28,12 @@ const HomeScreen = () => {
   }, []);
 
   const pressHandler = () => {
-    setLightSwitch((prevState) => ({
-      ...prevState,
-      power: prevState.power === 0 ? 100 : 0,
-    }));
-    console.log(lightSwitch);
     if (socket) {
+      setLightSwitch((prevState) => ({
+        ...prevState,
+        power: prevState.power === 0 ? 100 : 0,
+      }));
+      console.log(lightSwitch);
       socket.emit("clientData", { data: lightSwitch.power });
     }
   };
@@ -42,32 +46,55 @@ const HomeScreen = () => {
         justifyContent: "center",
         flex: 1,
       }}>
-      <TouchableOpacity
-        style={{
-          width: 150,
-          paddingVertical: 10,
-          backgroundColor: lightSwitch.power === 0 ? "#997165" : "#73A37B",
-          alignItems: "center",
-        }}
-        onPress={() => pressHandler()}>
-        <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
-          {lightSwitch.power === 0 ? "Bật" : "Tắt"}
-        </Text>
-      </TouchableOpacity>
       <View
         style={{
-          border: 1,
           margin: 10,
           padding: 10,
-          shadowColor: "#fff",
-          shadowRadius: 10,
-          shadowOffset: { width: 0, height: 0 },
+          shadowColor: "#000",
+          shadowRadius: 2,
+          shadowOpacity: 0.3,
+          shadowOffset: { width: 1, height: 2 },
           backgroundColor: "white",
           flexDirection: "row",
         }}>
-        <Text style={{ color: "black" }}>Value form server with socket : </Text>
-        <Text style={{ fontWeight: "bold", color: "black" }}>{data}</Text>
+        <Text style={{ color: "black" }}>State : </Text>
+        <Text style={{ fontWeight: "bold", color: socket ? "green" : "red" }}>
+          {socket ? "Conneted" : "Can not connect to server"}
+        </Text>
       </View>
+      {socket && (
+        <View
+          style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+          <TouchableOpacity
+            style={{
+              width: 150,
+              paddingVertical: 10,
+              backgroundColor: lightSwitch.power === 0 ? "#997165" : "#73A37B",
+              alignItems: "center",
+            }}
+            onPress={() => pressHandler()}>
+            <Text style={{ color: "white", fontWeight: "bold", fontSize: 20 }}>
+              {lightSwitch.power === 0 ? "Bật" : "Tắt"}
+            </Text>
+          </TouchableOpacity>
+          <View
+            style={{
+              margin: 10,
+              padding: 10,
+              shadowColor: "#000",
+              shadowRadius: 2,
+              shadowOpacity: 0.3,
+              shadowOffset: { width: 1, height: 2 },
+              backgroundColor: "white",
+              flexDirection: "row",
+            }}>
+            <Text style={{ color: "black" }}>
+              Value form server with socket :{" "}
+            </Text>
+            <Text style={{ fontWeight: "bold", color: "black" }}>{data}</Text>
+          </View>
+        </View>
+      )}
     </View>
   );
 };
