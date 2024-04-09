@@ -1,6 +1,8 @@
+const AdaController = require("./adaController");
 const express = require("express");
 const http = require("http");
 const socketIo = require("socket.io");
+const { addAbortSignal } = require("stream");
 
 const app = express();
 const server = http.createServer(app);
@@ -19,8 +21,9 @@ function sendSimulatedData() {
 
 io.on("connection", (socket) => {
   console.log("A client connected");
-
-  sendDataInterval = setInterval(sendSimulatedData, 1000);
+  var ada = new AdaController(socket);
+  ada.addFeed("testSlide");
+  // sendDataInterval = setInterval(sendSimulatedData, 1000);
 
   socket.on("clientData", (receiveData) => {
     console.log(
@@ -29,6 +32,7 @@ io.on("connection", (socket) => {
         ? "Người dùng muốn bật đèn"
         : "Người dùng muốn tắt đèn"
     );
+    ada.sendValue(receiveData.data, socket);
   });
 
   socket.on("disconnect", () => {
