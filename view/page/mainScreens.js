@@ -17,6 +17,7 @@ const Tabs = () => {
         name="Home"
         component={HomeScreen}
         options={{ headerShown: false }}
+        initialParams={{ userId: "663967313c2de9ba34675f9b" }}
       />
       <Tab.Screen
         name="Setting"

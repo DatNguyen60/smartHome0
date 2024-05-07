@@ -101,6 +101,7 @@ const styles = StyleSheet.create({
   bg_brown: { backgroundColor: "#997165" },
   bg_gray: { backgroundColor: "#D9E4E8" },
   bg_white: { backgroundColor: "#FFFFFF" },
+  bg_red: { backgroundColor: "#FF0000" },
   c_dark: { color: "#5C6265" },
   c_darkBlue: { color: "#4C7480" },
   c_lightBlue: { color: "#80D6FB" },
@@ -285,14 +286,13 @@ const styles = StyleSheet.create({
   rounded50: { borderRadius: 50 },
   // ! Shadow
   card: {
-    shadowColor: "#000000",
-    backgroundColor: "#fff",
-    shadowOffset: {
-      width: 1,
-      height: 2,
-    },
-    shadowOpacity: 0.2,
-    shadowRadius: 3,
+    padding: 10,
+    shadowColor: "#000",
+    shadowRadius: 2,
+    shadowOpacity: 0.3,
+    shadowOffset: { width: 1, height: 2 },
+    backgroundColor: "white",
+    flexDirection: "row",
   },
   sOffset1_1: { shadowOffset: { width: 1, height: 1 } },
   sOffset1_2: { shadowOffset: { width: 1, height: 2 } },
@@ -350,6 +350,16 @@ const styles = StyleSheet.create({
   sRadius8: { shadowRadius: 8 },
   sRadius9: { shadowRadius: 9 },
   sRadius10: { shadowRadius: 10 },
+
+  // ! zindex
+  z1: { zIndex: 1 },
+  z2: { zIndex: 2 },
+  z3: { zIndex: 3 },
+  z4: { zIndex: 4 },
+  z5: { zIndex: 5 },
+  z6: { zIndex: 6 },
+  // ! translate
+  tran50: { transform: "translate(-50%,-50%)" },
 });
 
 export default styles;

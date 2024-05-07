@@ -1,28 +1,18 @@
-const { MongoClient, ServerApiVersion } = require("mongodb");
-const uri =
-  "mongodb+srv://datnguyen666:Aljksfh14.@smarthome0.mrc1mhu.mongodb.net/?retryWrites=true&w=majority&appName=SmartHome0";
-// mongodb+srv://datnguyen666:<password>@smarthome0.mrc1mhu.mongodb.net/
-// Create a MongoClient with a MongoClientOptions object to set the Stable API version
-const client = new MongoClient(uri, {
-  serverApi: {
-    version: ServerApiVersion.v1,
-    strict: true,
-    deprecationErrors: true,
-  },
-});
+const { MongoClient } = require("mongodb");
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
-run().catch(console.dir);
+let dbConnection;
+
+module.exports = {
+  connectToDb: (cb) => {
+    MongoClient.connect("mongodb://localhost:27017/smartHome")
+      .then((client) => {
+        dbConnection = client.db();
+        return cb();
+      })
+      .catch((err) => {
+        console.log(err);
+        return cb(err);
+      });
+  },
+  getDb: () => dbConnection,
+};

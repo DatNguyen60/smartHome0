@@ -1,0 +1,63 @@
+[{
+  "_id": {
+    "$oid": "6639668b3c2de9ba34675f97"
+  },
+  "feedName": "yolo-fan",
+  "type": "Fan",
+  "power": "40",
+  "maxPower": 100
+},
+{
+  "_id": {
+    "$oid": "6639668b3c2de9ba34675f98"
+  },
+  "feedName": "yolo-led",
+  "type": "Led",
+  "power": 0,
+  "maxPower": 1
+},
+{
+  "_id": {
+    "$oid": "6639e0e8ccb3d7e46f757194"
+  },
+  "feedName": "yolo-sen",
+  "type": "Sen",
+  "power": 0,
+  "maxPower": 100
+},
+{
+  "_id": {
+    "$oid": "663a595c8dd8e0f0e33601a4"
+  },
+  "feedName": "temp-limit",
+  "type": "TempLimit",
+  "power": 20,
+  "maxPower": 100
+},
+{
+  "_id": {
+    "$oid": "663a5a1b8dd8e0f0e33601a6"
+  },
+  "feedName": "yolo-door",
+  "type": "Door",
+  "power": 0,
+  "maxPower": 1
+},
+{
+  "_id": {
+    "$oid": "663a5a5b8dd8e0f0e33601a7"
+  },
+  "feedName": "yolo-humidity",
+  "type": "Humidity",
+  "power": 0,
+  "maxPower": 100
+},
+{
+  "_id": {
+    "$oid": "663a5a798dd8e0f0e33601a8"
+  },
+  "feedName": "led-home",
+  "type": "Led",
+  "power": 0,
+  "maxPower": 1
+}]

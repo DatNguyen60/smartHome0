@@ -1,0 +1,53 @@
+[{
+  "_id": {
+    "$oid": "663967313c2de9ba34675f9b"
+  },
+  "room": [
+    {
+      "name": "Phòng khách",
+      "devices": [
+        {
+          "name": "Quạt",
+          "feedName": "yolo-fan"
+        },
+        {
+          "name": "Đèn",
+          "feedName": "yolo-led"
+        }
+      ]
+    },
+    {
+      "name": "Phòng ngủ",
+      "devices": []
+    },
+    {
+      "name": "Phòng ăn",
+      "devices": []
+    },
+    {
+      "name": "Phòng ngủ 2",
+      "devices": []
+    },
+    {
+      "name": "Phòng ăn 2",
+      "devices": []
+    },
+    {
+      "name": "Phòng khách 0",
+      "devices": []
+    },
+    {
+      "name": "Phòng khách 1",
+      "devices": []
+    }
+  ],
+  "name": "Đạt Nguyễn",
+  "devices": [
+    {
+      "feedName": "yolo-fan"
+    },
+    {
+      "feedName": "yolo-led"
+    }
+  ]
+}]
